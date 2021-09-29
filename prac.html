@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        #container {
+            display: flex;
+            flex-wrap: wrap;
+        }
+        #container > div {
+            flex-basis: 10%;
+            height: 300px;
+            border: 1px solid red;
+            margin: 10px;
+        }
+    </style>
+</head>
+<body>
+    <button id="btns">Show Details</button>
+    <div id="container"></div>
+  <script>
+      var btn = document.getElementById("btns");
+      var cont = document.getElementById("container");
+
+      var names = ["a", "b", "c", "d", "e", "f", "g", "h","i","j"]
+      var currency = ["k", "l", "m", "n", "o", "p", "q", "r","s","t"]
+     
+      window.addEventListener("load", function () {
+
+        fetch("http://localhost:3001/products")
+      .then(function (response) {
+          console.log(typeof response)
+          return response.json()
+      }).then(function (response) {
+          console.log(response)
+          var obj = {
+            id: Number,
+            name: String,
+            price: Number,
+            currency: String,
+            available_qty: Number
+          }
+          var j = 0;
+          for(var i = 0; i < 10; i++) {
+              var newObj = Object.create(obj)
+              newObj.id = i+4;
+              newObj.name = names[i]
+
+              newObj.price = i*5;
+              newObj.currency = currency[i];
+              newObj.available_qty = i+6;
+              response[j] = newObj;
+             j++;
+
+          }
+          //console.log(response)
+          display(response)
+         
+      })
+
+      })
+
+      function display(response) {
+        for(var i = 0; i < response.length; i++){
+            var ids = document.createElement("h2")
+            var divs = document.createElement("div")
+             
+            ids.textContent = `Id: ${response[i].id}`
+            var n = document.createElement("h2")
+            n.textContent = `Name: ${response[i].name}`
+            var pr = document.createElement("h2")
+            pr.textContent = `Price: ${response[i].price}`
+            var cur = document.createElement("h2")
+            cur.textContent = `Currency: ${response[i].currency}`
+            var avi = document.createElement("h2")
+            avi.textContent = `Available quantity: ${response[i].available_qty}`
+           
+            divs.append(ids, n, pr, cur)
+           cont.append(divs)
+            
+        }
+          
+      }
+  </script>
+</body>
+</html>
